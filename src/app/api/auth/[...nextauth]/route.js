@@ -1,3 +1,4 @@
+import connectDB from "@/lib/dbConnect";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -32,7 +33,12 @@ export const authOptions = {
                 const { email, password } = credentials;
 
                 if (email) {
-                    const currentUser = users.find(u => u?.email === email)
+                    // const currentUser = users.find(u => u?.email === email)
+
+                    const db = await connectDB();
+                    const currentUser = await db.collection('users').findOne({ email });
+                    console.log(currentUser);
+                    
                     if (currentUser) {
                         if (currentUser?.password === password) {
                             return currentUser;
@@ -59,7 +65,7 @@ export const authOptions = {
             // }
 
             console.log("This is TOken User", user)
-            console.log( "This is account User", account)
+            console.log("This is account User", account)
 
             if (account) {
                 token.role = user?.role
