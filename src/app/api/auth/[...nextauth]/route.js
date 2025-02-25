@@ -1,6 +1,8 @@
 import connectDB from "@/lib/dbConnect";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
+
 
 export const authOptions = {
     secret: process.env.NEXTAUTH_SECRET,
@@ -38,7 +40,7 @@ export const authOptions = {
                     const db = await connectDB();
                     const currentUser = await db.collection('users').findOne({ email });
                     console.log(currentUser);
-                    
+
                     if (currentUser) {
                         if (currentUser?.password === password) {
                             return currentUser;
@@ -56,6 +58,10 @@ export const authOptions = {
 
 
             }
+        }),
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET
         })
     ],
     callbacks: {
@@ -83,9 +89,6 @@ export const authOptions = {
 
 const handler = NextAuth(authOptions)
 
-const users = [
-    { email: 'm@gmail.com', password: 'password', role: 'admin', img: 'htit' }
-]
 
 
 export { handler as GET, handler as POST };
