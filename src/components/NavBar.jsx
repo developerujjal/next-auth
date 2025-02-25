@@ -14,6 +14,7 @@ const NavBar = () => {
                 <li><Link href={'/about'}>About</Link></li>
                 <li><Link href={'/posts'}>Posts</Link></li>
                 <li><Link href={'/service'}>Service</Link></li>
+                <li><Link href={'/api/auth/sign-up'}>Sign Up</Link></li>
                 <li><Link href={'/dashboard'}>Dashboard</Link></li>
             </ul>
             <div>
