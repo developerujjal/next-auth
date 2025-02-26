@@ -65,6 +65,28 @@ export const authOptions = {
         })
     ],
     callbacks: {
+        async signIn({ user, account, profile, email, credentials }) {
+            if (account) {
+                try {
+                    console.log('User: ', user)
+
+                    const query = { email: user?.email };
+                    const db = await connectDB(); // Assuming connectDB() returns a promise
+                    const usersDb = db.collection('users');
+                    const isExist = await usersDb.findOne(query);
+
+                    if (!isExist) {
+                        await usersDb.insertOne(user)
+                    };
+
+                    return true;
+
+                } catch (error) {
+                    return false;
+                }
+            }
+
+        },
         async jwt({ token, user, profile, account }) {
             // if (user) {
             //     token.role = user?.role
@@ -88,7 +110,6 @@ export const authOptions = {
 
 
 const handler = NextAuth(authOptions)
-
 
 
 export { handler as GET, handler as POST };
